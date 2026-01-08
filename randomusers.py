@@ -629,7 +629,7 @@ def count_users_by_gender(data: dict) -> dict:
     for user in data['results']:
         if user['gender'] == 'male':
             result['male'] += 1
-        else:
+        elif user['gender'] == 'female':
             result['female'] += 1
 
     return result
