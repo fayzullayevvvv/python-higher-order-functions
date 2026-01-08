@@ -588,7 +588,6 @@ def get_full_names(data: dict) -> list[str]:
     return full_names
 
 
-
 def get_users_by_country(data: dict, country: str) -> list[dict]:
     """
     Filters and returns users who live in a specific country.
@@ -610,7 +609,6 @@ def get_users_by_country(data: dict, country: str) -> list[dict]:
             result.append(res)
     
     return result
-
 
 
 def count_users_by_gender(data: dict) -> dict:
