@@ -834,7 +834,18 @@ def run_functions() -> None:
     """
     Runs and prints results of all data processing functions for demonstration purposes.
     """
-    print("Full Names:", get_full_names(randomuser_data))
+    print(" Full Names:", get_full_names(randomuser_data))
+    print("\n Users from Netherlands:", get_users_by_country(randomuser_data, "Netherlands"))
+    print("\n Count by Gender:", count_users_by_gender(randomuser_data))
+    print("\n Emails of users older than 60:", get_emails_of_older_than(randomuser_data, 60))
+    print("\n Users sorted by age (ascending):", sort_users_by_age(randomuser_data))
+    print("\n Usernames starting with 'S':", get_usernames_starting_with(randomuser_data, "S"))
+    print("\n Average Age:", get_average_age(randomuser_data))
+    print("\n Users grouped by nationality:", group_users_by_nationality(randomuser_data))
+    print("\n All coordinates:", get_all_coordinates(randomuser_data))
+    print("\n Oldest user:", get_oldest_user(randomuser_data))
+    print("\n Users in timezone '+9:00':", find_users_in_timezone(randomuser_data, "+9:00"))
+    print("\n Users registered before 2010:", get_registered_before_year(randomuser_data, 2010))
 
 
 run_functions()
