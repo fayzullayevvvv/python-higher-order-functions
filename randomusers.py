@@ -1,5 +1,5 @@
 randomuser_data = {
-    "results": [
+    "results": [    
         {
         "gender": "male",
         "name": {
@@ -580,7 +580,13 @@ def get_full_names(data: dict) -> list[str]:
     Returns:
         list[str]: List of full names.
     """
-    pass
+    full_names = []
+    for user in data['results']:
+        full_name = user['name']['first'] + ' ' + user['name']['last']
+        full_names.append(full_name)
+    
+    return full_names
+
 
 
 def get_users_by_country(data: dict, country: str) -> list[dict]:
@@ -594,7 +600,17 @@ def get_users_by_country(data: dict, country: str) -> list[dict]:
     Returns:
         list[dict]: List of dictionaries containing full name and email of matching users.
     """
-    pass
+    result = []
+    for user in data['results']:
+        if user['location']['country'] == country:
+            res = {
+                'name' : user['name']['first'] + ' ' + user['name']['last'],
+                'email' : user['email']      
+            }
+            result.append(res)
+    
+    return result
+
 
 
 def count_users_by_gender(data: dict) -> dict:
@@ -607,7 +623,18 @@ def count_users_by_gender(data: dict) -> dict:
     Returns:
         dict: Dictionary with gender as keys and count as values.
     """
-    pass
+    result = {
+        'male': 0,
+        'female':0
+    }
+
+    for user in data['results']:
+        if user['gender'] == 'male':
+            result['male'] += 1
+        else:
+            result['female'] += 1
+
+    return result
 
 
 def get_emails_of_older_than(data: dict, age: int) -> list[str]:
@@ -621,7 +648,13 @@ def get_emails_of_older_than(data: dict, age: int) -> list[str]:
     Returns:
         list[str]: List of email addresses.
     """
-    pass
+    result = []
+
+    for user in data['results']:
+        if user['dob']['age'] > age:
+            result.append(user['email'])
+
+    return result
 
 
 def sort_users_by_age(data: dict, descending: bool = False) -> list[dict]:
@@ -635,7 +668,17 @@ def sort_users_by_age(data: dict, descending: bool = False) -> list[dict]:
     Returns:
         list[dict]: List of users with name and age sorted accordingly.
     """
-    pass
+    users = []
+    for user in data['results']:
+        full_name = user['name']['first'] + ' ' + user['name']['last']
+        age = user['dob']['age']
+        users.append([full_name, age])
+
+    result = []
+    for i in users:
+        result.append({'name':i[0], 'age':i[1]})
+
+    return sorted(result, key=lambda age:age['age'], reverse=descending)
 
 
 def get_usernames_starting_with(data: dict, letter: str) -> list[str]:
@@ -649,7 +692,13 @@ def get_usernames_starting_with(data: dict, letter: str) -> list[str]:
     Returns:
         list[str]: List of matching usernames.
     """
-    pass
+    result = []
+    for user in data['results']:
+        username = user['login']['username']
+        if username.startswith(letter):
+            result.append(username)
+
+    return result
 
 
 def get_average_age(data: dict) -> float:
@@ -662,7 +711,12 @@ def get_average_age(data: dict) -> float:
     Returns:
         float: Average age.
     """
-    pass
+    ages = []
+    for user in data['results']:
+        age = user['dob']['age']
+        ages.append(age)
+
+    return sum(ages) / len(ages)
 
 
 def group_users_by_nationality(data: dict) -> dict:
@@ -675,7 +729,15 @@ def group_users_by_nationality(data: dict) -> dict:
     Returns:
         dict: Dictionary with nationality as keys and count as values.
     """
-    pass
+    nationaly = {}
+    for user in data['results']:
+        nat = user['nat']
+        if nat not in nationaly.keys():
+            nationaly[nat] = 1
+        else:
+            nationaly[nat] += 1
+    
+    return nationaly
 
 
 def get_all_coordinates(data: dict) -> list[tuple[str, str]]:
@@ -688,7 +750,13 @@ def get_all_coordinates(data: dict) -> list[tuple[str, str]]:
     Returns:
         list[tuple[str, str]]: List of coordinate tuples.
     """
-    pass
+    coordinates = []
+    for user in data['results']:
+        coordinat1 = user['location']['coordinates']['latitude']
+        coordinat2 = user['location']['coordinates']['longitude']
+        coordinates.append((coordinat1, coordinat2))
+
+    return coordinates
 
 
 def get_oldest_user(data: dict) -> dict:
@@ -701,7 +769,15 @@ def get_oldest_user(data: dict) -> dict:
     Returns:
         dict: Dictionary containing 'name', 'age', and 'email' of the oldest user.
     """
-    pass
+    oldest_user = max(data['results'], key=lambda user:user['dob']['age'])
+
+    result = {
+        'name': oldest_user['name']['first'] + ' ' + oldest_user['name']['last'],
+        'age': oldest_user['dob']['age'],
+        'email': oldest_user['email']
+    }
+
+    return result
 
 
 def find_users_in_timezone(data: dict, offset: str) -> list[dict]:
@@ -715,7 +791,19 @@ def find_users_in_timezone(data: dict, offset: str) -> list[dict]:
     Returns:
         list[dict]: List of users with full name and city.
     """
-    pass
+    result = []
+    
+    for user in data['results']:
+        timezone = user['location']['timezone']['offset']
+        name = user['name']['first'] + ' ' + user['name']['last']
+        city = user['location']['city']
+        if timezone == offset:
+            result.append({
+                'name':name,
+                'city':city
+            })
+    
+    return result
 
 
 def get_registered_before_year(data: dict, year: int) -> list[dict]:
@@ -729,7 +817,19 @@ def get_registered_before_year(data: dict, year: int) -> list[dict]:
     Returns:
         list[dict]: List of users with full name and registration date.
     """
-    pass
+    result = []
+
+    for user in data['results']:
+        registired_year = user['registered']['date'][:4]
+        registired_date = user['registered']['date'][:10]
+        name = user['name']['first'] + ' ' + user['name']['last']
+        if int(registired_year) < year:
+            result.append({
+                'name':name,
+                'registered': registired_date
+            })
+    
+    return result
 
 
 def run_functions() -> None:
